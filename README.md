@@ -8,7 +8,7 @@ Thông tin chung:
 OS: CentOS 6
 NIC: eth0
 Web server: LAMP hoặc LEMP server
-Load-balancer: nginx <a href="http://nginx.org/en/docs/http/load_balancing.html">(Tham khảo)</a>
+Load-balancer: nginx
 ```
 
 Thông tin riêng:
@@ -134,7 +134,7 @@ lb2:~# ip addr sh eth0
        valid_lft forever preferred_lft forever
 ```
 
-### Cài đặt nginx làm load-balancer
+### 2. Cài đặt nginx làm load-balancer
 
 Ở cũng ở trên lb1 và lb2, chúng ta cài thêm nginx để làm load-balancer.
 
@@ -180,7 +180,7 @@ chkconfig nginx on
 ```
 
 
-### Tham khảo:
+### 3. Tham khảo:
 
 - Cài đặt keepalived: https://www.howtoforge.com/setting-up-a-high-availability-load-balancer-with-haproxy-keepalived-on-debian-lenny-p2
 - nginx load-balancing: http://nginx.org/en/docs/http/load_balancing.html
