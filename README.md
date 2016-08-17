@@ -58,6 +58,20 @@ vrrp_instance VI_1 {
 
 - **priority 101**: Chúng ta set lb1 làm master
 
+**Quan trọng**: Cấu hình chia sẻ Virtual IP (Làm cả trên lb1 và lb2):
+
+Thêm vào file `sysctl.conf`
+
+```
+echo "net.ipv4.ip_nonlocal_bind=1" >> /etc/sysctl.conf
+```
+
+Chạy lệnh để hệ thống nhận file cấu hình và kiểm tra lại xem đã có dòng vừa thêm chưa:
+
+```
+sysctl -p
+```
+
 Sau đó khởi động keepalived ở lb1
 
 ```
@@ -133,10 +147,11 @@ lb2:~# ip addr sh eth0
     inet6 fe80::20c:29ff:febe:7b3b/64 scope link
        valid_lft forever preferred_lft forever
 ```
+## Chọn 1 trong 2 module bên dưới để làm load-balancer
 
-### 2. Cài đặt nginx làm load-balancer
+### 2.1 Cài đặt nginx làm load-balancer
 
-Ở cũng ở trên lb1 và lb2, chúng ta cài thêm nginx để làm load-balancer.
+Ở trên lb1 và lb2, chúng ta cài thêm nginx để làm load-balancer.
 
 Để cài đặt nginx, chúng ta phải cài gói `epel-release` trước.
 
@@ -178,9 +193,69 @@ Khởi động nginx và cho nó khởi động cùng với hệ thống:
 service nginx start
 chkconfig nginx on
 ```
+### 2.2 Cài đặt HAProxy
 
+Chúng ta cài đặt HAProxy ở trên 2 máy lb1 và lb2 như sau:
+
+```
+yum install -y haproxy
+```
+
+Sửa file cấu hình của HAProxy
+
+```
+cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg_orig
+cat /dev/null > /etc/haproxy/haproxy.cfg
+vi /etc/haproxy/haproxy.cfg
+```
+
+```
+global
+        log 127.0.0.1   local0
+        log 127.0.0.1   local1 notice
+        #log loghost    local0 info
+        maxconn 4096
+        #debug
+        #quiet
+        user haproxy
+        group haproxy
+
+defaults
+        log     global
+        mode    http
+        option  httplog
+        option  dontlognull
+        retries 3
+        redispatch
+        maxconn 2000
+        contimeout      5000
+        clitimeout      50000
+        srvtimeout      50000
+		
+listen webfarm 192.168.100.123:80 # Lắng nghe IP ảo
+       mode http
+       stats enable
+	   stats auth admin:1
+       balance roundrobin
+       cookie JSESSIONID prefix
+       option httpclose
+       #option forwardfor
+       #option httpchk HEAD /check.txt HTTP/1.0
+       server srv1 192.168.100.196:80 cookie A check
+       server srv2 192.168.100.198:80 cookie B check
+
+```
+
+- **admin:1**: là User và Password để đăng nhập vào webmin của HAProxy
+
+Bật HAProxy và chạy cùng hệ thống khi khởi động:
+
+```
+service haproxy start
+chkconfig haproxy on
+```
 
 ### 3. Tham khảo:
 
-- Cài đặt keepalived: https://www.howtoforge.com/setting-up-a-high-availability-load-balancer-with-haproxy-keepalived-on-debian-lenny-p2
+- Cài đặt keepalived và HAProxy: https://www.howtoforge.com/setting-up-a-high-availability-load-balancer-with-haproxy-keepalived-on-debian-lenny-p2
 - nginx load-balancing: http://nginx.org/en/docs/http/load_balancing.html
