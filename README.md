@@ -1,6 +1,6 @@
 # Cài đặt Keepalived và load-balancer cho Web Server
 
-#### **Chú ý**: Bài viết hướng dẫn Load-balancing cho Web Server với 2 module là nginx (ngx_http_upstream_module) và HAProxy. Hãy chọn 1 trong 2 module để cấu hình cho server của bạn, không cài đặt 2 module cùng lúc để tránh xung đột. Xin cảm ơn! 
+ **Chú ý**: Bài viết hướng dẫn Load-balancing cho Web Server với 2 module là nginx (ngx_http_upstream_module) và HAProxy. Hãy chọn 1 trong 2 module để cấu hình cho server của bạn, không cài đặt 2 module cùng lúc để tránh xung đột. Xin cảm ơn! 
 
 ### Mô hình cài đặt
 
@@ -199,7 +199,7 @@ Khởi động nginx và cho nó khởi động cùng với hệ thống:
 service nginx start
 chkconfig nginx on
 ```
-### 2.2 Cài đặt HAProxy <a name="#haproxy"></a>
+### 2.2 Cài đặt HAProxy <a name="haproxy"></a>
 
 Chúng ta cài đặt HAProxy ở trên 2 máy lb1 và lb2 như sau:
 
