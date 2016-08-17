@@ -1,4 +1,6 @@
-# Cài đặt Keepalived và nginx load-balancing cho Web Server
+# Cài đặt Keepalived và load-balancer cho Web Server
+
+**Chú ý**: Bài viết hướng dẫn Load-balancing cho Web Server với 2 module là nginx (ngx_http_upstream_module) và HAProxy. Hãy chọn 1 trong 2 module để cấu hình cho server của bạn, không cài đặt 2 module để tránh xung đột. Xin cảm ơn! 
 
 ### Mô hình cài đặt
 
@@ -8,7 +10,7 @@ Thông tin chung:
 OS: CentOS 6
 NIC: eth0
 Web server: LAMP hoặc LEMP server
-Load-balancer: nginx
+Load-balancer: nginx hoặc HAProxy
 ```
 
 Thông tin riêng:
