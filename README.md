@@ -201,13 +201,13 @@ chkconfig nginx on
 ```
 ### 2.2 Cài đặt HAProxy <a name="haproxy"></a>
 
-Chúng ta cài đặt HAProxy ở trên 2 máy lb1 và lb2 như sau:
+Chúng ta cài đặt HAProxy ở trên cả 2 máy lb1 và lb2 như sau:
 
 ```
 yum install -y haproxy
 ```
 
-Sửa file cấu hình của HAProxy
+Sửa file cấu hình của HAProxy (Làm trên cả 2 máy lb1 và lb2)
 
 ```
 cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg_orig
