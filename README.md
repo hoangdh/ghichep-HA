@@ -179,7 +179,7 @@ http {
      upstream backend {
 		
         server 192.168.100.196 max_fails=3 fail_timeout=30s;
-		server 192.168.100.198 max_fails=3 fail_timeout=30s;
+	server 192.168.100.198 max_fails=3 fail_timeout=30s;
     }
 
     server {
@@ -234,24 +234,24 @@ defaults
         retries 3
         redispatch
         maxconn 2000
-        contimeout      5000
-        clitimeout      50000
-        srvtimeout      50000
+        concect timeout      5000
+        client timeout      50000
+        server timeout      50000
 		
 listen webfarm 192.168.100.123:80 # Lắng nghe IP ảo
        mode http
        stats enable
-	   stats auth admin:1
+       stats auth admin:1
        balance roundrobin
        cookie JSESSIONID prefix
        option httpclose
-       #option forwardfor
+       option forwardfor
        #option httpchk HEAD /check.txt HTTP/1.0
        server srv1 192.168.100.196:80 cookie A check
        server srv2 192.168.100.198:80 cookie B check
 
 ```
-
+- **stats enable**: Bật tính năng Webmin của HAProxy, truy cập vào: http://192.168.100.123/haproxy?stats
 - **admin:1**: là User và Password để đăng nhập vào webmin của HAProxy
 
 Bật HAProxy và chạy cùng hệ thống khi khởi động:
