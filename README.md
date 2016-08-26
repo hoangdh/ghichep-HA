@@ -234,9 +234,9 @@ defaults
         retries 3
         redispatch
         maxconn 2000
-        concect timeout      5000
-        client timeout      50000
-        server timeout      50000
+        timeout connect  5000
+        timeout client  10000
+        timeout server  10000
 		
 listen webfarm 192.168.100.123:80 # Lắng nghe IP ảo
        mode http
