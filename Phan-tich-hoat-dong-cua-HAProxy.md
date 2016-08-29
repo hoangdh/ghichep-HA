@@ -57,6 +57,10 @@ Lọc các gói tin `http` bằng cách gõ `http` vào ô `Filter` của WireSh
 
 Hình ảnh dưới đây là khi tôi bấm vào bài viết `this-post...` của Website.
 
-<img src="http://image.prntscr.com/image/c77f950d48de44adbe4ac50bee8b695a.png" />
+<img src="http://image.prntscr.com/image/2af90b30b9f4437ead18230a898753f6.png" />
 
-Nhìn vào hình, chúng ta thấy request từ USER - 192.168.100.2 đến HAProxy - 192.168.100.191 (No.208). Sau đó, HAProxy chuyển request này đến Web Server - 192.168.100.196 (No.209), Web Server xử lý rồi gửi lại Response cho HAProxy (No.236). Cuối cùng, HAProxy gửi trả response cho USER (No. 240)
+Nhìn vào hình:
+- Lần 1: chúng ta thấy request từ USER - 192.168.100.2 đến HAProxy - 192.168.100.191 (No.21). Sau đó, HAProxy chuyển request này đến Webserver 1 - 192.168.100.196 (No.23), Webserver 1 xử lý rồi gửi lại Response cho HAProxy (No.25). Cuối cùng, HAProxy gửi trả response cho USER (No. 27)
+- Lần 2: Request (No.41) từ USER đến HAProxy, HAProxy chuyển request cho Webserver 2 - 192.168.100.198 (No.43), sau khi xử lý xong response lại được gửi lại HAProxy (No.45) và HAProxy trả response lại cho USER (No.47).
+
+Đây là kiểu RoundRobin.
