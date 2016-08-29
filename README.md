@@ -200,7 +200,7 @@ service nginx start
 chkconfig nginx on
 ```
 
-Như vậy chúng ta đã cài đặt xong load-balancer bằng nginx. Ngoài ra, các bạn cũng có thể tham khảo thêm các load-balance bằng HAProxy theo hướng dẫn bên dưới.
+Như vậy chúng ta đã cài đặt xong load-balancer bằng nginx. Ngoài ra, các bạn cũng có thể tham khảo thêm cách load-balancer bằng HAProxy theo hướng dẫn bên dưới.
 
 ### 2.2 Cài đặt HAProxy <a name="haproxy"></a>
 
