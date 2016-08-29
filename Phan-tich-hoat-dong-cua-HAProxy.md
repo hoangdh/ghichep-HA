@@ -8,7 +8,7 @@
 
 #### Mô hình
 
-<img src="http://image.prntscr.com/image/a9a24751928a48b9bda6aa28cf46aef7.png" />
+<img width=50% src="http://image.prntscr.com/image/067e2cd01f2c4d908a37af18f43854a0.png" />
 
 ```
 HAProxy
