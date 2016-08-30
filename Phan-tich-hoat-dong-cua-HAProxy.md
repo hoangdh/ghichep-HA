@@ -27,21 +27,27 @@ Cân bằng tải là một phương pháp phân phối khối lượng truy c�
 - Bước 3: Các Webserver xử lý và response lại HAProxy
 - Bước 4: HAProxy tiếp nhận các response và gửi lại cho USER
 
+<img width=50% src="http://image.prntscr.com/image/a755207f0c984ca9a62a267e2f8f1939.png" />
+
 ## 3. Các thành phần cần thiết
 
 ### 3.1 Mô hình
 
 <img width=75% src="http://image.prntscr.com/image/03604931beaa4fb6928eb478f0ad38bd.png" />
 
+Bài viết hướng dẫn cài đặt vui lòng tham khảo tại <a href="https://github.com/hoangdh/Cai-dat-Keepalived-va-loadbalancer-cho-web-server" target="_blank">đây</a>.
+
 ```
 HAProxy 1
 OS: CentOS 6
 eth1: 192.168.100.191
+VIP: 192.168.100.123
 keepalived + HAProxy
 
 HAProxy 2
 OS: CentOS 6
 eth1: 192.168.100.199
+VIP: 192.168.100.123
 keepalived + HAProxy
 
 Web1:
@@ -62,8 +68,8 @@ Brower: Firefox
 
 ### 3.2 Yêu cầu:
 
-- Trên USER (Windows 7) cài đặt  <a href="https://github.com/hoangdh/Wireshark">WireShark</a> (để đọc gói tin)
-- Trên HAProxy cài đặt <a href="https://github.com/hoangdh/tcpdump-tonghop">TCPDUMP</a> (bắt gói tin)
+- Trên USER (Windows 7) cài đặt  <a href="https://github.com/hoangdh/Wireshark" target="_blank">WireShark</a> (để đọc gói tin)
+- Trên HAProxy cài đặt <a href="https://github.com/hoangdh/tcpdump-tonghop" target="_blank">TCPDUMP</a> (bắt gói tin)
 
 ## 4. Các bước tiến hành:
 
