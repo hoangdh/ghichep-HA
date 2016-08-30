@@ -4,13 +4,13 @@
 
 - Bài viết phân tích cách hoạt động của HAProxy. 
 - Giúp người đọc hiểu rõ hơn về mô hình
-- Phân tích luồng hoạt động và các gói tin 
+- Phân tích luồng hoạt động của các gói tin 
 
 ## 2. Giới thiệu giải pháp
 
 ### 2.1 Mô tả giải pháp HAProxy
 
-HAProxy(High Availability Proxy) là một giải pháp mã nguồn mở về cân bằng tải có thể dùng cho nhiều dịch vụ chạy trên nền TCP, phù hợp với việc cân bằng tải với giao thức HTTP giúp ổn định phiên kết nối và các tiến trình Layer 7.
+**HAProxy** (High Availability Proxy) là một giải pháp mã nguồn mở về cân bằng tải có thể dùng cho nhiều dịch vụ chạy trên nền TCP, phù hợp với việc cân bằng tải với giao thức HTTP giúp ổn định phiên kết nối và các tiến trình Layer 7.
 
 Cân bằng tải là một phương pháp phân phối khối lượng truy cập trên nhiều máy chủ nhằm tối ưu hóa tài nguyên hiện có đồng thời tối đa hóa thông lượng, giảm thời gian đáp ứng và tránh tình trạng quá tải cho một máy chủ.
 
