@@ -27,7 +27,7 @@ Cân bằng tải là một phương pháp phân phối khối lượng truy c�
 - Bước 3: Các Webserver xử lý và response lại HAProxy
 - Bước 4: HAProxy tiếp nhận các response và gửi lại cho USER
 
-<img width=75% src="http://image.prntscr.com/image/a755207f0c984ca9a62a267e2f8f1939.png" />
+<img width=75% src="http://i1363.photobucket.com/albums/r714/HoangLove9z/luong-haproxy_zpsyoo7tyga.png" />
 
 ## 3. Các thành phần cần thiết
 
@@ -92,7 +92,7 @@ tcpdump -i eth1 -p tcp -w /opt/haproxy.pcap
 <img src="http://image.prntscr.com/image/0d50311ac5bd47e8b0fa7592f0313473.png" />
 **Bước 2**: Lọc các gói tin `http` bằng cách gõ `http` vào ô `Filter` của WireShark và bấm `Apply`.
 
-<img src="http://image.prntscr.com/image/2af90b30b9f4437ead18230a898753f6.png" />
+<img src="http://image.prntscr.com/image/f72f62cda8994191976d1e19230378a0.png" />
 
 ###Nhìn vào hình:
 
