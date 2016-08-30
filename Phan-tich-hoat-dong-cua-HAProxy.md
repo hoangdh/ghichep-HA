@@ -36,6 +36,7 @@ Cân bằng tải là một phương pháp phân phối khối lượng truy c�
 <img width=75% src="http://image.prntscr.com/image/03604931beaa4fb6928eb478f0ad38bd.png" />
 
 Bài viết hướng dẫn cài đặt vui lòng tham khảo tại <a href="https://github.com/hoangdh/Cai-dat-Keepalived-va-loadbalancer-cho-web-server" target="_blank">đây</a>.
+
  | HAProxy 1 | HAProxy 2 | Web1 | Web2 | USER |
 --- | --- | --- | ---| --- | --- |
 OS | CentOS 6 | CentOS 6 | CentOS 6 | CentOS 6 | Windows 7 |
