@@ -106,4 +106,16 @@ Chúng ta thấy request từ USER - 192.168.100.22 đến VIP của HAProxy - 1
 
 Request (No.55) từ USER cũng đến VIP của HAProxy, HAProxy chuyển request cho Webserver 2 - 192.168.100.198 (No.57), sau khi xử lý xong response lại được gửi lại HAProxy (No.59) và HAProxy trả response lại cho USER (No.61).
 
-Đây là kiểu RoundRobin.
+=> Đây là kiểu RoundRobin.
+
+Đồng thời trong lúc thực hiện bắt gói tin trên HAProxy, trên Webserver 1 và 2, tôi cũng thực hiện tcpdump để capture các gói tin.
+
+- Hình ảnh trên Webserver 1:
+
+<img src="http://image.prntscr.com/image/7ec3199b8c6b4c99a7b65c4bb0ba6b60.png" />
+
+- Hình ảnh trên Webserver 2:
+
+<img src="http://image.prntscr.com/image/5a792a86a3af48b987f221c85998edad.png" />
+
+Nhìn vào hình ảnh, chúng ta chỉ thấy luồng hoạt động giữa HAProxy (192.168.100.191) với các Webserver (192.168.100.196, 192.168.100.198) không nhìn thấy bất kỳ hoạt động nào của USER (192.168.100.22). Điều này cho thấy USER chỉ làm việc với HAProxy và tính an toàn được phát huy.
