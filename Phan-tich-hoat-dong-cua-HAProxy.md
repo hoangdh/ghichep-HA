@@ -8,11 +8,11 @@
 
 ## 2. Giới thiệu giải pháp
 
-### 2.1 Mô tả giải pháp HAProxy
-
-**HAProxy** (High Availability Proxy) là một giải pháp mã nguồn mở về cân bằng tải có thể dùng cho nhiều dịch vụ chạy trên nền TCP, phù hợp với việc cân bằng tải với giao thức HTTP giúp ổn định phiên kết nối và các tiến trình Layer 7.
+### 2.1 Mô tả giải pháp cân bằng tải sử dụng HAProxy
 
 Cân bằng tải là một phương pháp phân phối khối lượng truy cập trên nhiều máy chủ nhằm tối ưu hóa tài nguyên hiện có đồng thời tối đa hóa thông lượng, giảm thời gian đáp ứng và tránh tình trạng quá tải cho một máy chủ.
+
+**HAProxy** (High Availability Proxy) là một giải pháp mã nguồn mở về cân bằng tải có thể dùng cho nhiều dịch vụ chạy trên nền TCP, phù hợp với việc cân bằng tải với giao thức HTTP giúp ổn định phiên kết nối và các tiến trình Layer 7.
 
 ### 2.2 Một số lợi ích khi sử dụng phương pháp cân bằng tải:
 
@@ -36,35 +36,14 @@ Cân bằng tải là một phương pháp phân phối khối lượng truy c�
 <img width=75% src="http://image.prntscr.com/image/03604931beaa4fb6928eb478f0ad38bd.png" />
 
 Bài viết hướng dẫn cài đặt vui lòng tham khảo tại <a href="https://github.com/hoangdh/Cai-dat-Keepalived-va-loadbalancer-cho-web-server" target="_blank">đây</a>.
+ | HAProxy 1 | HAProxy 2 | Web1 | Web2 | USER |
+--- | --- | --- | ---| --- | --- |
+OS | CentOS 6 | CentOS 6 | CentOS 6 | CentOS 6 | Windows 7 |
+NIC | eth1 | eth0 | eth0 | eth0 | Local Area Connection |
+IP | 192.168.100.191 | 192.168.100.199 | 192.168.100.196 | 192.168.100.198 | 192.168.100.22 |
+Virtual IP | 192.168.100.123 | 192.168.100.123 | Không | Không | Không |
+Package| HAProxy + keepalived |HAProxy + keepalived | APACHE + MariaDB | APACHE | Firefox, WireShark |
 
-```
-HAProxy 1
-OS: CentOS 6
-eth1: 192.168.100.191
-VIP: 192.168.100.123
-keepalived + HAProxy
-
-HAProxy 2
-OS: CentOS 6
-eth1: 192.168.100.199
-VIP: 192.168.100.123
-keepalived + HAProxy
-
-Web1:
-OS: CentOS 6
-eth0: 192.168.100.196
-APACHE + MariaDB
-
-Web2:
-OS: CentOS 6
-eth0: 192.168.100.198
-APACHE
-
-USER:
-OS: Windows 7
-NIC: 192.168.100.22
-Brower: Firefox
-```
 
 ### 3.2 Yêu cầu:
 
