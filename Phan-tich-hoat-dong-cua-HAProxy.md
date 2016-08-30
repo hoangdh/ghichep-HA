@@ -22,10 +22,10 @@ Cân bằng tải là một phương pháp phân phối khối lượng truy c�
 
 ### 2.3 Mô tả hoạt động
 
-- Bước 1: Request từ phía USER
+- Bước 1: Request từ phía USER đến VIP của HAProxy
 - Bước 2: Request từ phía USER được HAProxy tiếp nhận và chuyển tới các Webserver
 - Bước 3: Các Webserver xử lý và response lại HAProxy
-- Bước 4: HAProxy tiếp nhận các response và gửi lại cho USER
+- Bước 4: HAProxy tiếp nhận các response và gửi lại cho USER bằng VIP
 
 <img width=75% src="http://i1363.photobucket.com/albums/r714/HoangLove9z/luong-haproxy_zpsyoo7tyga.png" />
 
@@ -62,7 +62,7 @@ APACHE
 
 USER:
 OS: Windows 7
-NIC: 192.168.100.2
+NIC: 192.168.100.22
 Brower: Firefox
 ```
 
@@ -84,7 +84,7 @@ tcpdump -i eth1 -p tcp -w /opt/haproxy.pcap
 
 <img src="http://image.prntscr.com/image/3199e49fe60d454fbcc4febb9ee1a395.png" />
 
-- Sau khi Trình duyệt tải xong trang, chúng ta quay lại cửa sổ `tcpdump` bấm tổ hợp `Ctrl` + `C` để dừng quá trình bắt gói tin.
+- Sau khi Trình duyệt tải xong trang, bấm Ctrl + F5 để tải lại trang một lần nữa. Sau khi tải trang 2 lần, chúng ta quay lại cửa sổ `tcpdump` bấm tổ hợp `Ctrl` + `C` để dừng quá trình bắt gói tin.
 
 <img src="http://image.prntscr.com/image/e3d2113f331545ae966c4c38a4b167a7.png" />
 - Copy file `haproxy.pcap` vừa capture từ `tcpdump` về máy Windows 7 bằng WinSCP và mở bằng WireShark.
@@ -92,14 +92,18 @@ tcpdump -i eth1 -p tcp -w /opt/haproxy.pcap
 <img src="http://image.prntscr.com/image/0d50311ac5bd47e8b0fa7592f0313473.png" />
 **Bước 2**: Lọc các gói tin `http` bằng cách gõ `http` vào ô `Filter` của WireShark và bấm `Apply`.
 
-<img src="http://image.prntscr.com/image/f72f62cda8994191976d1e19230378a0.png" />
+<img src="http://image.prntscr.com/image/3535cd4af7cd4dd0a30ae27878aa3780.png" />
 
 ###Nhìn vào hình:
+- Lần 1:
 
-<img src="http://image.prntscr.com/image/2ac786bd153f4f1f9c2d891f23e547d6.png" />
-- Lần 1: chúng ta thấy request từ USER - 192.168.100.2 đến HAProxy - 192.168.100.191 (No.21). Sau đó, HAProxy chuyển request này đến Webserver 1 - 192.168.100.196 (No.23), Webserver 1 xử lý rồi gửi lại Response cho HAProxy (No.25). Cuối cùng, HAProxy gửi trả response cho USER (No. 27)
+<img src="http://image.prntscr.com/image/6cf4b77077a34f5aa8d24339e462e1e4.png" />
 
-<img src="http://image.prntscr.com/image/1c2f73a621a64c12a03d4872390e842f.png" />
-- Lần 2: Request (No.41) từ USER đến HAProxy, HAProxy chuyển request cho Webserver 2 - 192.168.100.198 (No.43), sau khi xử lý xong response lại được gửi lại HAProxy (No.45) và HAProxy trả response lại cho USER (No.47).
+Chúng ta thấy request từ USER - 192.168.100.22 đến VIP của HAProxy - 192.168.100.123 (No.35). Sau đó, HAProxy - 192.168.100.191 chuyển request này đến Webserver 1 - 192.168.100.196 (No.37), Webserver 1 xử lý rồi gửi lại Response cho HAProxy (No.39). Cuối cùng, HAProxy gửi trả response cho USER (No. 41)
+- Lần 2: 
+
+<img src="http://image.prntscr.com/image/bca8245e3efd480cb92c61a837f0b88e.png" />
+
+Request (No.55) từ USER cũng đến VIP của HAProxy, HAProxy chuyển request cho Webserver 2 - 192.168.100.198 (No.57), sau khi xử lý xong response lại được gửi lại HAProxy (No.59) và HAProxy trả response lại cho USER (No.61).
 
 Đây là kiểu RoundRobin.
