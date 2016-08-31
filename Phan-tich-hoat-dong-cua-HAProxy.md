@@ -25,10 +25,10 @@ Cân bằng tải là một phương pháp phân phối khối lượng truy c�
 
 ### 2.3 Mô tả hoạt động
 
-- **Bước 1**:: Request từ phía USER đến VIP của HAProxy
-- **Bước 2**:: Request từ phía USER được HAProxy tiếp nhận và chuyển tới các Webserver
-- **Bước 3**:: Các Webserver xử lý và response lại HAProxy
-- **Bước 4**:: HAProxy tiếp nhận các response và gửi lại cho USER bằng VIP
+- **Bước 1**: Request từ phía USER đến VIP của HAProxy
+- **Bước 2**: Request từ phía USER được HAProxy tiếp nhận và chuyển tới các Webserver
+- **Bước 3**: Các Webserver xử lý và response lại HAProxy
+- **Bước 4**: HAProxy tiếp nhận các response và gửi lại cho USER bằng VIP
 
 <img width=75% src="http://i1363.photobucket.com/albums/r714/HoangLove9z/luong-haproxy_zpsyoo7tyga.png" />
 
@@ -58,17 +58,6 @@ Package| HAProxy + keepalived |HAProxy + keepalived | APACHE + MariaDB | APACHE 
 
 ### 4.1 Chuẩn bị
  
-**Bước 1**: Bắt các gói tin ở các máy `HAProxy`, `Web1`, `Web2`
-
-**Bước 2**: Truy cập http bằng trình duyệt Firefox trên `USER`
-
-**Bước 3**: Dừng việc bắt gói tin và lấy file vừa capture về `USER`
-
-**Bước 4**: Mở file bằng WireShark trên `USER`
-
-**Bước 5**: Phân tích
-
-### 4.2 Phân tích
 **Bước 1**: Thực hiện quá trình bắt gói tin trên node `HAProxy`, `Web1`, `Web2` bằng `tcpdump`
 
 ```
@@ -79,7 +68,6 @@ tcpdump -i eth0 -p tcp -w /opt/web1.pcap
 # Bắt gói trên  Web2
 tcpdump -i eth0 -p tcp -w /opt/web2.pcap
 ```
-
 **Bước 2**: Chúng ta dùng USER (Windows 7) để tạo request đến HAProxy.
 
 <img src="http://image.prntscr.com/image/3199e49fe60d454fbcc4febb9ee1a395.png" />
@@ -98,25 +86,35 @@ Copy file `haproxy.pcap` vừa capture từ `tcpdump` về máy Windows 7 bằng
 
 <img src="http://image.prntscr.com/image/3535cd4af7cd4dd0a30ae27878aa3780.png" />
 
-**Bước 5**: Phân tích:
+#### Chú thích
 
-###Lần 1:
+- **No.**: Số thứ tự của bản tin đã capture được
+- **Time**: Thời gian (giây) kể từ khi capture (<a href="https://www.wireshark.org/docs/wsug_html_chunked/ChWorkTimeFormatsSection.html" target="_blank">Chi tiết</a>)
+- **Source**: Địa chỉ nguồn gửi bản tin
+- **Destination**: Địa chỉ đích nhận bản tin
+- **Protocol**: Giao thức sử dụng gửi, nhận bản tin
+- **Length**: Kích thước của bản tin
+- **Info**: Thông tin/Nội dung của bản tin
+
+### 4.2 Phân tích
+
+#### Bước 1:
 
 <img src="http://image.prntscr.com/image/6800e8b045544380af5098e85f8462f7.png" />
 
-- Ở `No.35`, `USER - 192.168.100.22` gửi một request HTTP đến VIP của `HAProxy - 192.168.100.123`  (1)
-- Sau đó `No.37`, `HAProxy - 192.168.100.191` chuyển request này đến `Web 1 - 192.168.100.196` (2)
-- Nhìn vào `No.39`,  `Web 1` xử lý request rồi gửi lại response cho `HAProxy`. (3)
-- Cuối cùng ở `No. 41`, `HAProxy` gửi trả response cho `USER` (4)
+- `No.35`, Người dùng có IP: 192.168.100.22 truy cập HTTP đến `HAProxy` thông qua IP VIP là 192.168.100.123 (1)
+- `No.37`, `HAProxy` có địa chỉ 192.168.100.191 sẽ gửi bản tin truy cập HTTP của Người dùng đến `Webserver 1` có IP là 192.168.100.196 (2)
+- `No.39`,  `Webserver 1` (192.168.100.196) xử lý request rồi gửi lại response cho `HAProxy` có địa chỉ là 192.168.100.191 (3)
+- `No. 41`, `HAProxy` gửi trả response từ VIP là 192.168.100.123 đến người dùng có địa chỉ là 192.168.100.22 (4)
 
-###Lần 2:
+#### Bước 2:
 
 <img src="http://image.prntscr.com/image/bcd36b5672024f849af3e12181db9c7a.png" />
 
-- `No.55`, request từ `USER` cũng đến VIP của `HAProxy` (1)
-- `No.57`, `HAProxy` chuyển request cho `Web 2 - 192.168.100.198` (2)
-- Ở `No.59`, sau khi được `Web 2` xử lý xong, response lại được gửi lại `HAProxy` (3)
-- Và cuối cùng ở `No.61`, `HAProxy` cũng trả response lại cho `USER`. (4)
+- `No.55`, một request từ người dùng có địa chỉ 192.168.100.22 cũng đến VIP có địa chỉ là 192.168.100.123 của `HAProxy` (1)
+- `No.57`, `HAProxy` có địa chỉ 192.168.100.191 chuyển request cho `Webserver 2` có IP là 192.168.100.198 (2)
+- `No.59`, sau khi được `Webserver 2` - 192.168.100.198 xử lý xong, response được gửi lại `HAProxy` có địa chỉ là 192.168.100.191 (3)
+- `No.61`, `HAProxy` có VIP là 192.168.100.123 trả lại response cho người dùng có địa chỉ là 192.168.100.22 (4)
 
 => Đây là kiểu RoundRobin.
 
