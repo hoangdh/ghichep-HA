@@ -12,7 +12,7 @@
 
 Cân bằng tải là một phương pháp phân phối khối lượng truy cập trên nhiều máy chủ nhằm tối ưu hóa tài nguyên hiện có đồng thời tối đa hóa thông lượng, giảm thời gian đáp ứng và tránh tình trạng quá tải cho một máy chủ.
 
-**HAProxy** (High Availability Proxy) là một giải pháp mã nguồn mở về cân bằng tải có thể dùng cho nhiều dịch vụ chạy trên nền TCP, phù hợp với việc cân bằng tải với giao thức HTTP giúp ổn định phiên kết nối và các tiến trình Layer 7.
+**HAProxy** (High Availability Proxy) là một giải pháp mã nguồn mở về cân bằng tải có thể dùng cho nhiều dịch vụ chạy trên nền TCP (Layer 4), phù hợp với việc cân bằng tải với giao thức HTTP giúp ổn định phiên kết nối và các tiến trình Layer 7.
 
 ### 2.2 Một số lợi ích khi sử dụng phương pháp cân bằng tải:
 
@@ -22,10 +22,10 @@ Cân bằng tải là một phương pháp phân phối khối lượng truy c�
 
 ### 2.3 Mô tả hoạt động
 
-- Bước 1: Request từ phía USER đến VIP của HAProxy
-- Bước 2: Request từ phía USER được HAProxy tiếp nhận và chuyển tới các Webserver
-- Bước 3: Các Webserver xử lý và response lại HAProxy
-- Bước 4: HAProxy tiếp nhận các response và gửi lại cho USER bằng VIP
+- **Bước 1**:: Request từ phía USER đến VIP của HAProxy
+- **Bước 2**:: Request từ phía USER được HAProxy tiếp nhận và chuyển tới các Webserver
+- **Bước 3**:: Các Webserver xử lý và response lại HAProxy
+- **Bước 4**:: HAProxy tiếp nhận các response và gửi lại cho USER bằng VIP
 
 <img width=75% src="http://i1363.photobucket.com/albums/r714/HoangLove9z/luong-haproxy_zpsyoo7tyga.png" />
 
@@ -53,49 +53,74 @@ Package| HAProxy + keepalived |HAProxy + keepalived | APACHE + MariaDB | APACHE 
 
 ## 4. Các bước tiến hành:
 
-**Bước 1**: 
-- Thực hiện quá trình bắt gói tin trên node HAProxy bằng `tcpdump`
+### 4.1 Chuẩn bị
+ 
+**Bước 1**: Bắt các gói tin ở các máy `HAProxy`, `Web1`, `Web2`
+**Bước 2**: Truy cập http bằng trình duyệt Firefox trên `USER`
+**Bước 3**: Dừng việc bắt gói tin và lấy file vừa capture về `USER`
+**Bước 4**: Mở file bằng WireShark trên `USER`
+**Bước 5**: Phân tích
+
+### 4.2 Phân tích
+**Bước 1**: Thực hiện quá trình bắt gói tin trên node `HAProxy`, `Web1`, `Web2` bằng `tcpdump`
 
 ```
 tcpdump -i eth1 -p tcp -w /opt/haproxy.pcap
 ```
 
-- Sau khi chạy lệnh trên HAProxy, chúng ta dùng USER (Windows 7) để tạo request đến HAProxy.
+**Bước 2**: Chúng ta dùng USER (Windows 7) để tạo request đến HAProxy.
 
 <img src="http://image.prntscr.com/image/3199e49fe60d454fbcc4febb9ee1a395.png" />
 
-- Sau khi Trình duyệt tải xong trang, bấm Ctrl + F5 để tải lại trang một lần nữa. Sau khi tải trang 2 lần, chúng ta quay lại cửa sổ `tcpdump` bấm tổ hợp `Ctrl` + `C` để dừng quá trình bắt gói tin.
+Sau khi Trình duyệt tải xong trang, bấm Ctrl + F5 để tải lại trang một lần nữa.
+
+**Bước 3:** Chúng ta quay lại cửa sổ `tcpdump` bấm tổ hợp `Ctrl` + `C` để dừng quá trình bắt gói tin.
 
 <img src="http://image.prntscr.com/image/e3d2113f331545ae966c4c38a4b167a7.png" />
-- Copy file `haproxy.pcap` vừa capture từ `tcpdump` về máy Windows 7 bằng WinSCP và mở bằng WireShark.
+
+Copy file `haproxy.pcap` vừa capture từ `tcpdump` về máy Windows 7 bằng WinSCP.
 
 <img src="http://image.prntscr.com/image/0d50311ac5bd47e8b0fa7592f0313473.png" />
-**Bước 2**: Lọc các gói tin `http` bằng cách gõ `http` vào ô `Filter` của WireShark và bấm `Apply`.
+
+**Bước 4**: Mở file bằng WireShark và lọc các gói tin `http` bằng cách gõ `http` vào ô `Filter` của WireShark và bấm `Apply`.
 
 <img src="http://image.prntscr.com/image/3535cd4af7cd4dd0a30ae27878aa3780.png" />
 
-###Nhìn vào hình:
-- Lần 1:
+**Bước 5**: Phân tích:
+
+###Lần 1:
 
 <img src="http://image.prntscr.com/image/6cf4b77077a34f5aa8d24339e462e1e4.png" />
 
-Chúng ta thấy request từ USER - 192.168.100.22 đến VIP của HAProxy - 192.168.100.123 (No.35). Sau đó, HAProxy - 192.168.100.191 chuyển request này đến Webserver 1 - 192.168.100.196 (No.37), Webserver 1 xử lý rồi gửi lại Response cho HAProxy (No.39). Cuối cùng, HAProxy gửi trả response cho USER (No. 41)
-- Lần 2: 
+<img src="http://image.prntscr.com/image/6800e8b045544380af5098e85f8462f7.png" />
+
+- Ở `No.35`, `USER - 192.168.100.22` gửi một request HTTP đến VIP của `HAProxy - 192.168.100.123`  (1)
+- Sau đó `No.37`, `HAProxy - 192.168.100.191` chuyển request này đến `Web 1 - 192.168.100.196` (2)
+- Nhìn vào `No.39`,  `Web 1` xử lý request rồi gửi lại response cho `HAProxy`. (3)
+- Cuối cùng ở `No. 41`, `HAProxy` gửi trả response cho `USER` (4)
+
+###Lần 2:
 
 <img src="http://image.prntscr.com/image/bca8245e3efd480cb92c61a837f0b88e.png" />
 
-Request (No.55) từ USER cũng đến VIP của HAProxy, HAProxy chuyển request cho Webserver 2 - 192.168.100.198 (No.57), sau khi xử lý xong response lại được gửi lại HAProxy (No.59) và HAProxy trả response lại cho USER (No.61).
+<img src="http://image.prntscr.com/image/bcd36b5672024f849af3e12181db9c7a.png" />
+
+- `No.55`, request từ `USER` cũng đến VIP của `HAProxy` (1)
+- `No.57`, `HAProxy` chuyển request cho `Web 2 - 192.168.100.198` (2)
+- Ở `No.59`, sau khi được `Web 2` xử lý xong, response lại được gửi lại `HAProxy` (3)
+- Và cuối cùng ở `No.61`, `HAProxy` cũng trả response lại cho `USER`. (4)
 
 => Đây là kiểu RoundRobin.
 
-Đồng thời trong lúc thực hiện bắt gói tin trên HAProxy, trên Webserver 1 và 2, tôi cũng thực hiện tcpdump để capture các gói tin.
+### Phân tích file đã bắt được trên `Web1` và Web2`:
 
-- Hình ảnh trên Webserver 1:
+- Các gói tin trên `Web 1`:
 
-<img src="http://image.prntscr.com/image/7ec3199b8c6b4c99a7b65c4bb0ba6b60.png" />
+<img src="http://image.prntscr.com/image/784249db42494949a1ce60b493a9cc78.png" />
 
-- Hình ảnh trên Webserver 2:
 
-<img src="http://image.prntscr.com/image/5a792a86a3af48b987f221c85998edad.png" />
+- Các gói tin trên `Web 2`:
 
-Nhìn vào hình ảnh, chúng ta chỉ thấy luồng hoạt động giữa HAProxy (192.168.100.191) với các Webserver (192.168.100.196, 192.168.100.198) không nhìn thấy bất kỳ hoạt động nào của USER (192.168.100.22). Điều này cho thấy USER chỉ làm việc với HAProxy và tính an toàn được phát huy.
+<img src="http://image.prntscr.com/image/bd845b03aeae4ab683da984639d4db0f.png" />
+
+Nhìn vào hình ảnh, chúng ta chỉ thấy luồng hoạt động giữa `HAProxy` (192.168.100.191) với các `Webserver` (192.168.100.196, 192.168.100.198) không nhìn thấy bất kỳ hoạt động nào của `USER` (192.168.100.22). Điều này cho thấy `USER` chỉ làm việc với `HAProxy` và tính an toàn được phát huy.
