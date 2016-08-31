@@ -1,4 +1,4 @@
-# Phân tích hoạt động của HAProxy
+# Phân tích hoạt động của HAProxy ở Layer 4
 
 ## 1. Mục đích của bài viết
 
