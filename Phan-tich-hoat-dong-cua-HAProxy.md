@@ -14,6 +14,9 @@ Cân bằng tải là một phương pháp phân phối khối lượng truy c�
 
 **HAProxy** (High Availability Proxy) là một giải pháp mã nguồn mở về cân bằng tải có thể dùng cho nhiều dịch vụ chạy trên nền TCP (Layer 4), phù hợp với việc cân bằng tải với giao thức HTTP giúp ổn định phiên kết nối và các tiến trình Layer 7.
 
+- Cân bằng tải ở Layer 4 chỉ thích hợp cho việc bạn có các webserver có cùng một ứng dụng. 
+- Cân bằng tải ở Layer 7 có thể phân tải cho các ứng dụng trên một webserver có nhiều ứng dụng cùng domain.
+
 ### 2.2 Một số lợi ích khi sử dụng phương pháp cân bằng tải:
 
 - Tăng khả năng đáp ứng, tránh tình trạng quá tải
@@ -99,8 +102,6 @@ Copy file `haproxy.pcap` vừa capture từ `tcpdump` về máy Windows 7 bằng
 
 ###Lần 1:
 
-<img src="http://image.prntscr.com/image/6cf4b77077a34f5aa8d24339e462e1e4.png" />
-
 <img src="http://image.prntscr.com/image/6800e8b045544380af5098e85f8462f7.png" />
 
 - Ở `No.35`, `USER - 192.168.100.22` gửi một request HTTP đến VIP của `HAProxy - 192.168.100.123`  (1)
@@ -109,8 +110,6 @@ Copy file `haproxy.pcap` vừa capture từ `tcpdump` về máy Windows 7 bằng
 - Cuối cùng ở `No. 41`, `HAProxy` gửi trả response cho `USER` (4)
 
 ###Lần 2:
-
-<img src="http://image.prntscr.com/image/bca8245e3efd480cb92c61a837f0b88e.png" />
 
 <img src="http://image.prntscr.com/image/bcd36b5672024f849af3e12181db9c7a.png" />
 
