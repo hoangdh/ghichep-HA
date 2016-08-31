@@ -1,13 +1,30 @@
-# Phân tích hoạt động của HAProxy ở Layer 4
+# Phân tích hoạt động của HAProxy
 
+###Mục lục:
+[1. Mục đích của bài viết ](#1)
+[2. Giới thiệu giải pháp ](#2)
+- [2.1 Mô tả giải pháp ](#2.1)
+- [2.2 Một số lợi ích ](#2.2)
+- [2.3 Mô tả hoạt động ](#2.3)
+[3. Các thành phần cần thiết ](#3)
+- [3.1 Mô hình ](#3.1)
+- [3.2 Yêu cầu ](#3.2)
+[4. Phân tích hoạt động ](#4)
+- [4.1 Chuẩn bị ](#4.1)
+- [4.2 Phân tích ](#4.2)
+[5. Kết luận ](#5)
+
+<a name="1"></a>
 ## 1. Mục đích của bài viết
 
 - Bài viết phân tích cách hoạt động của HAProxy. 
 - Giúp người đọc hiểu rõ hơn về mô hình
 - Phân tích luồng hoạt động của các gói tin 
 
+<a name="2"></a>
 ## 2. Giới thiệu giải pháp
 
+<a name="2.1"></a>
 ### 2.1 Mô tả giải pháp cân bằng tải sử dụng HAProxy
 
 Cân bằng tải là một phương pháp phân phối khối lượng truy cập trên nhiều máy chủ nhằm tối ưu hóa tài nguyên hiện có đồng thời tối đa hóa thông lượng, giảm thời gian đáp ứng và tránh tình trạng quá tải cho một máy chủ.
@@ -17,12 +34,14 @@ Cân bằng tải là một phương pháp phân phối khối lượng truy c�
 - Cân bằng tải ở Layer 4 chỉ thích hợp cho việc bạn có các webserver có cùng một ứng dụng. 
 - Cân bằng tải ở Layer 7 có thể phân tải cho các ứng dụng trên một webserver có nhiều ứng dụng cùng domain.
 
+<a name="2.2"></a>
 ### 2.2 Một số lợi ích khi sử dụng phương pháp cân bằng tải:
 
 - Tăng khả năng đáp ứng, tránh tình trạng quá tải
 - Tăng độ tin cậy và tính dự phòng cao
 - Tăng tính bảo mật cho hệ thống
 
+<a name="2.3"></a>
 ### 2.3 Mô tả hoạt động
 
 - **Bước 1**: Request từ phía USER đến VIP của HAProxy
@@ -32,8 +51,10 @@ Cân bằng tải là một phương pháp phân phối khối lượng truy c�
 
 <img width=75% src="http://i1363.photobucket.com/albums/r714/HoangLove9z/luong-haproxy_zpsyoo7tyga.png" />
 
+<a name="3"></a>
 ## 3. Các thành phần cần thiết
 
+<a name="3.1"></a>
 ### 3.1 Mô hình
 
 <img width=75% src="http://image.prntscr.com/image/03604931beaa4fb6928eb478f0ad38bd.png" />
@@ -48,26 +69,38 @@ IP | 192.168.100.191 | 192.168.100.199 | 192.168.100.196 | 192.168.100.198 | 192
 Virtual IP | 192.168.100.123 | 192.168.100.123 | Không | Không | Không |
 Package| HAProxy + keepalived |HAProxy + keepalived | APACHE + MariaDB | APACHE | Firefox, WireShark |
 
-
+<a name="3.2"></a>
 ### 3.2 Yêu cầu:
 
 - Trên USER (Windows 7) cài đặt  <a href="https://github.com/hoangdh/Wireshark" target="_blank">WireShark</a> (để đọc gói tin)
 - Trên HAProxy cài đặt <a href="https://github.com/hoangdh/tcpdump-tonghop" target="_blank">TCPDUMP</a> (bắt gói tin)
 
-## 4. Các bước tiến hành:
+<a name="4"></a>
+## 4. Phân tích hoạt động
 
+<a name="4.1"></a>
 ### 4.1 Chuẩn bị
  
 **Bước 1**: Thực hiện quá trình bắt gói tin trên node `HAProxy`, `Web1`, `Web2` bằng `tcpdump`
 
+#### Bắt gói trên HAProxy
+
 ```
-# Bắt gói trên HAProxy
 tcpdump -i eth1 -p tcp -w /opt/haproxy.pcap
-# Bắt gói trên Web1
+```
+
+#### Bắt gói trên Web1
+
+```
 tcpdump -i eth0 -p tcp -w /opt/web1.pcap
-# Bắt gói trên  Web2
+```
+
+#### Bắt gói trên  Web2
+
+```
 tcpdump -i eth0 -p tcp -w /opt/web2.pcap
 ```
+
 **Bước 2**: Chúng ta dùng USER (Windows 7) để tạo request đến HAProxy.
 
 <img src="http://image.prntscr.com/image/3199e49fe60d454fbcc4febb9ee1a395.png" />
@@ -96,6 +129,7 @@ Copy file `haproxy.pcap` vừa capture từ `tcpdump` về máy Windows 7 bằng
 - **Length**: Kích thước của bản tin
 - **Info**: Thông tin/Nội dung của bản tin
 
+<a name="4.2"></a>
 ### 4.2 Phân tích
 
 #### Bước 1:
@@ -130,3 +164,8 @@ Copy file `haproxy.pcap` vừa capture từ `tcpdump` về máy Windows 7 bằng
 <img src="http://image.prntscr.com/image/bd845b03aeae4ab683da984639d4db0f.png" />
 
 Nhìn vào hình ảnh, chúng ta chỉ thấy luồng hoạt động giữa `HAProxy` (192.168.100.191) với các `Webserver` (192.168.100.196, 192.168.100.198) không nhìn thấy bất kỳ hoạt động nào của `USER` (192.168.100.22). Điều này cho thấy `USER` chỉ làm việc với `HAProxy` và tính an toàn được phát huy.
+
+<a name="5"></a>
+### 5. Kết luận
+
+Trên đây là những phân tích giúp các bạn có thể hiểu rõ hơn về cơ chế hoạt động của HAProxy. Hy vọng giúp thêm các bạn mới nghiên cứu về giải pháp cân bằng tải, làm hệ thống của các bạn tăng hiệu năng và tính sẵn sàng đáp ứng được nhu cầu sử dụng của người dùng.
