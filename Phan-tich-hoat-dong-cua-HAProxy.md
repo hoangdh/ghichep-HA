@@ -90,19 +90,19 @@ Package| HAProxy + keepalived |HAProxy + keepalived | APACHE + MariaDB | APACHE 
  
 **Bước 1**: Thực hiện quá trình bắt gói tin trên node `HAProxy`, `Web1`, `Web2` bằng `tcpdump`
 
-#### Bắt gói trên HAProxy
+- Bắt gói trên HAProxy
 
 ```
 tcpdump -i eth1 -p tcp -w /opt/haproxy.pcap
 ```
 
-#### Bắt gói trên Web1
+- Bắt gói trên Web1
 
 ```
 tcpdump -i eth0 -p tcp -w /opt/web1.pcap
 ```
 
-#### Bắt gói trên  Web2
+- Bắt gói trên  Web2
 
 ```
 tcpdump -i eth0 -p tcp -w /opt/web2.pcap
