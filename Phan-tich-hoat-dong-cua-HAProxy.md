@@ -56,16 +56,25 @@ Package| HAProxy + keepalived |HAProxy + keepalived | APACHE + MariaDB | APACHE 
 ### 4.1 Chuẩn bị
  
 **Bước 1**: Bắt các gói tin ở các máy `HAProxy`, `Web1`, `Web2`
+
 **Bước 2**: Truy cập http bằng trình duyệt Firefox trên `USER`
+
 **Bước 3**: Dừng việc bắt gói tin và lấy file vừa capture về `USER`
+
 **Bước 4**: Mở file bằng WireShark trên `USER`
+
 **Bước 5**: Phân tích
 
 ### 4.2 Phân tích
 **Bước 1**: Thực hiện quá trình bắt gói tin trên node `HAProxy`, `Web1`, `Web2` bằng `tcpdump`
 
 ```
+# Bắt gói trên HAProxy
 tcpdump -i eth1 -p tcp -w /opt/haproxy.pcap
+# Bắt gói trên Web1
+tcpdump -i eth0 -p tcp -w /opt/web1.pcap
+# Bắt gói trên  Web2
+tcpdump -i eth0 -p tcp -w /opt/web2.pcap
 ```
 
 **Bước 2**: Chúng ta dùng USER (Windows 7) để tạo request đến HAProxy.
@@ -112,7 +121,7 @@ Copy file `haproxy.pcap` vừa capture từ `tcpdump` về máy Windows 7 bằng
 
 => Đây là kiểu RoundRobin.
 
-### Phân tích file đã bắt được trên `Web1` và Web2`:
+### Phân tích file đã bắt được trên `Web1` và `Web2`:
 
 - Các gói tin trên `Web 1`:
 
