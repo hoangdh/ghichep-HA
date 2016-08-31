@@ -2,16 +2,22 @@
 
 ###Mục lục:
 [1. Mục đích của bài viết ](#1)
+
 [2. Giới thiệu giải pháp ](#2)
+
 - [2.1 Mô tả giải pháp ](#2.1)
 - [2.2 Một số lợi ích ](#2.2)
 - [2.3 Mô tả hoạt động ](#2.3)
+
 [3. Các thành phần cần thiết ](#3)
+
 - [3.1 Mô hình ](#3.1)
 - [3.2 Yêu cầu ](#3.2)
 [4. Phân tích hoạt động ](#4)
+
 - [4.1 Chuẩn bị ](#4.1)
 - [4.2 Phân tích ](#4.2)
+
 [5. Kết luận ](#5)
 
 <a name="1"></a>
