@@ -74,7 +74,7 @@ OS | CentOS 6 | CentOS 6 | CentOS 6 | CentOS 6 | Windows 7 |
 NIC | eth1 | eth0 | eth0 | eth0 | Local Area Connection |
 IP | 192.168.100.191 | 192.168.100.199 | 192.168.100.196 | 192.168.100.198 | 192.168.100.22 |
 Virtual IP | 192.168.100.123 | 192.168.100.123 | Không | Không | Không |
-Package| HAProxy + keepalived |HAProxy + keepalived | APACHE + MariaDB | APACHE | Firefox, WireShark |
+Package| HAProxy + keepalived |HAProxy + keepalived | APACHE | APACHE | Firefox, WireShark |
 
 <a name="3.2"></a>
 ### 3.2 Yêu cầu:
