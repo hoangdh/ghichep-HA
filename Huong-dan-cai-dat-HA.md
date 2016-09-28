@@ -20,7 +20,7 @@ Loadbalance 1: 192.168.100.191
 Loadbalance 2: 192.168.100.192
 Virtual IP: 192.168.100.123
 Web Server 1: 192.168.100.196
-Web Server 2: 192.168.100.196
+Web Server 2: 192.168.100.198
 ```
 
 ### 1. Cài đặt Keepalived để tạo Virtual IP
