@@ -1,6 +1,6 @@
 ### Hướng dẫn sử dụng
 
-*Script có thể chạy trên một máy bất kỳ hoặc trên 1 trong 2 node.*
+*Script có thể chạy trên một máy bất kỳ hoặc trên 1 trong 2 node. Yêu cầu trên các node phải có SSH Key.*
 
 - **Bước 1**: Khai báo IP các node của bạn vào file `conf.cfg` theo mẫu:
 
@@ -13,13 +13,13 @@
         export HOST2=node2
     ```
     
-        **Chú thích**:
-        - `PASSWORD`: là mật khẩu của user `hacluster`
-        - `IP1` là địa chỉ IP của node 1
-        - `IP2` là địa chỉ IP của node 2
-        - `VIP` là địa chỉ IP ảo
-        - `HOST1` là tên của node 1, tên này được ghi trong file `hosts`
-        - `HOST2` tương tự như trên, là tên của node 2
+    **Chú thích**:
+    - `PASSWORD`: là mật khẩu của user `hacluster`
+    - `IP1` là địa chỉ IP của node 1
+    - `IP2` là địa chỉ IP của node 2
+    - `VIP` là địa chỉ IP ảo
+    - `HOST1` là tên của node 1, tên này được ghi trong file `hosts`
+    - `HOST2` tương tự như trên, là tên của node 2
 
 - **Bước 2**: Copy các key ssh và đặt tên lần lượt theo mẫu `node1` và `node2` tương ứng với file key của các node
 
