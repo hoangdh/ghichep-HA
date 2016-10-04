@@ -173,7 +173,7 @@ pcs status
 <a name="2.6"></a>
 #### 2.6 Vô hiệu hóa STONITH và tắt QUORUM 
 
-Để hiểu hơn về 2 khái niệm, vui lòng đọc bài  <a href="https://github.com/hoangdh/Pacemaker>này</a>  để có thêm thông tin chi tiết, xin cảm ơn!
+Để hiểu hơn về 2 khái niệm, vui lòng đọc bài  <a href="https://github.com/hoangdh/Pacemaker">này</a>  để có thêm thông tin chi tiết, xin cảm ơn!
 
 ```
 pcs property set stonith-enabled=false
