@@ -1,0 +1,218 @@
+## Hướng dẫn cấu hình Pacemake + Corosync để HA cho APACHE
+
+#### Mục lục
+
+[1. Chuẩn bị ](#1)
+
+[2. Cài đặt](#2)
+
+- [2.1 Khai báo trong `hosts` của từng máy](#2.1)
+- [2.2 Cài đặt APACHE ](#2.2)
+- [2.3 Cài đặt Pacemaker ](#2.3)
+- [2.4 Cấu hình Pacemaker ](#2.4)
+- [2.5 Khởi động Cluster ](#2.5)
+- [2.6 Vô hiệu hóa STONITH và tắt QUORUM ](#2.6)
+- [2.7 Cấu hình Virtual IP ](#2.7)
+- [2.8  Thêm resource APACHE](#2.8)
+- [2.9 Cấu hình sử dụng tài nguyên trên 1 máy ](#2.9)
+
+[3. Kết luận ](#3)
+
+<a name="1"></a>
+### 1. Chuẩn bị
+
+- Node1
+
+    ```
+    OS: CentOS 7
+    Hostname: node1.hoang.lab
+    eth0: 192.168.100.197
+    ```
+    
+- Node2
+
+    ```
+    OS: CentOS 7
+    Hostname: node1.hoang.lab
+    eth0: 192.168.100.198
+    ```
+    
+- Virtual IP
+
+    ```
+    192.168.100.123/24
+    ```
+<a name="2"></a>
+### 2. Cài đặt
+
+<a name="2.1"></a>
+#### 2.1 Khai báo trong `hosts` của từng máy
+
+    <img src="http://image.prntscr.com/image/3935bdb7903c44499458927395595cc0.png" />
+    
+    Trên đây là file `hosts` của `node1`. Trên `node2`, chúng ta mở file `/etc/hosts` và sửa tương tự.
+    
+    <img src"http://image.prntscr.com/image/43462f7b20d24e9792d9292bc91f2043.png" />
+    
+<a name="2.2"></a>
+#### 2.2 Cài đặt APACHE
+
+    Chúng ta cài đặt APACHE và cấu hình trên cả 2 node. Cụ thể như sau:
+    
+    - Cài đặt:
+    ```
+    yum install httpd -y
+    ```
+    
+    - Cấu hình: Tạo một file theo dõi trạng thái của APACHE
+    
+    ```
+    vi /etc/httpd/conf.d/status.conf
+    ```
+    
+    Với nội dung như sau:
+    
+    ```
+    <Location /server-status>
+       SetHandler server-status
+       Order Deny,Allow
+       Deny from all
+       Allow from 127.0.0.1
+    </Location>
+    ```
+    
+    Lưu lại file.
+    
+    *Lưu ý: Không khởi động APACHE lên, bằng `systemctl` ngay.*
+    
+<a name="2.3"></a>
+#### 2.3 Cài đặt Pacemaker
+
+    Tiếp theo, chúng ta cài đặt Pacemaker lên cả 2 node với các bước như sau:
+    
+    ```
+    yum install pacemaker pcs -y
+    ```
+    
+    Khởi động `pcs` deamon và cho chạy cùng hệ thống:
+    
+    ```
+    systemctl start pcsd.service
+    systemctl enable pcsd.service
+    ```
+    
+    Sau khi quá trình cài đặt thành công, hệ thống sẽ có thêm một user mới có tên là `hacluster`. User này đã bị vô hiệu hóa chức năng đăng nhập từ xa, nhiệm vụ của user này để đồng bộ cấu hình và khởi động các dịch vụ giữa các node với nhau. Trên 2 node, chúng ta thống nhất password cho user này.
+    
+    ```
+    passwd hacluster
+    ```
+    
+<a name="2.4"></a>
+#### 2.4 Cấu hình Pacemaker
+
+    - Cấu hình FirewallD
+    
+        Xem trạng thái của FirewallD
+        
+        ```
+        firewall-cmd --state
+        ```
+        
+        Nếu không hoạt động, hãy khởi động và thêm rule cho nó:
+        
+        ```
+        systemctl start firewalld.service
+        firewall-cmd --permanent --add-service=high-availability
+        firewall-cmd --reload
+        ```
+        
+    - Xác thực giữa 2 node với nhau (Làm trên bất kỳ node nào), bằng user `hacluster` và password đã tạo ở bước trên.
+    
+        ```
+        pcs cluster auth node1 node2
+        ```
+        
+        <img src="http://image.prntscr.com/image/ea07e33a7ecb49c2b84cbbccbe615aa8.png" />
+        
+        Bước tiếp theo, chúng ta sẽ tạo và đồng bộ file cấu hình Corosync. Chúng ta đặt tên cho cluster là `webcluter`, các bạn có thể chọn bất kỳ tên gì bạn thích.
+        
+        ```
+        pcs cluster setup --name webcluster node1 node2
+        ```
+        
+        <img src="http://image.prntscr.com/image/0707f5cb7dc548aeb7a96a5bfd86749d.png" />
+        
+        Sau khi chạy lệnh trên thành công, file cấu hình của Corosync được tạo ra ở cả 2 node tại `/etc/corosync/corosync.conf`
+
+<a name="2.5"></a>
+#### 2.5 Khởi động Cluster
+
+     Khởi động cluster bằng lệnh trên `node1`
+     
+     ```
+     pcs cluster start --all
+     ```
+    <img src="http://image.prntscr.com/image/35ac0533bf63426ebde12807adde4d60.png" />
+    
+    Hãy chắc chắn rằng, Pacemaker và Corosync được khởi động cùng với hệ thống.
+    
+    ```
+    systemctl enable corosync.service
+    systemctl enable pacemaker.service
+    ```
+    
+    Kiểm tra trạng thái của cluster trên mỗi host
+    
+    ```
+    pcs status
+    ```
+    
+    <img src="http://image.prntscr.com/image/574f05133a264ffb92ac5d91948571ab.png" />
+
+<a name="2.6"></a>
+#### 2.6 Vô hiệu hóa STONITH và tắt QUORUM 
+
+    Để hiểu hơn về 2 khái niệm, vui lòng đọc bài  <a href="https://github.com/hoangdh/Pacemaker>này</a>  để có thêm thông tin chi tiết, xin cảm ơn!
+    
+    ```
+    pcs property set stonith-enabled=false
+    pcs property set no-quorum-policy=ignore
+    ```
+    
+<a name="2.7"></a>
+#### 2.7 Cấu hình Virtual IP
+
+    ```
+    pcs resource create Cluster_VIP ocf:heartbeat:IPaddr2 ip=192.168.100.123 cidr_netmask=24 op monitor interval=20s
+    ```
+
+<a name="2.8"></a>
+#### 2.8 Thêm Resource apache 
+    
+    <img src="http://image.prntscr.com/image/668622894c47463a82b404a157069c43.png" />
+    
+    ```
+    pcs resource create WebServer ocf:heartbeat:apache configfile=/etc/httpd/conf/httpd.conf statusurl="http://127.0.0.1/server-status" op monitor interval=20s
+    ```
+    
+<a name="2.9"></a>
+#### 2.9 Cấu hình sử dụng tài nguyên trên 1 máy
+
+     Ở hình trên, chúng ta thấy VIP ở trên một máy, APACHE ở trên một máy. Chúng ta sẽ cấu hình cho nó sử dụng tài nguyên trên 1 máy chủ.
+     
+    ```
+    pcs constraint colocation add WebServer Cluster_VIP INFINITY
+    ```
+    
+    Chờ khoảng 30s và kiểm tra lại:
+    
+    ```
+    pcs status
+    ```
+    
+    <img src="http://image.prntscr.com/image/edc652017829460badc1757d3fae4328.png" />
+
+<a name="3"></a>
+### 3. Tham khảo
+
+- https://www.digitalocean.com/community/tutorials/how-to-set-up-an-apache-active-passive-cluster-using-pacemaker-on-centos-7
