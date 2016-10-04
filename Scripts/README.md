@@ -2,7 +2,7 @@
 
 *Script có thể chạy trên một máy bất kỳ hoặc trên 1 trong 2 node. Yêu cầu trên các node phải có SSH Key.*
 
-- **Bước 1**: Khai báo IP các node của bạn vào file `conf.cfg` theo mẫu:
+- **Bước 1**: Khai báo IP các node của bạn vào file `var.cfg` theo mẫu:
 
     ```
         export PASSWORD=Abcdef@6789
