@@ -1,4 +1,4 @@
-Một vài ghi chép về HA
+## Một vài ghi chép về HA
 
 [1. Ghi chép HAProxy] (https://github.com/hoangdh/ghichep-HA/tree/master/HAProxy)
 
