@@ -6,4 +6,4 @@ Một vài ghi chép về HA
 
 [2. Ghi chép Pacemaker và Corosync] (https://github.com/hoangdh/ghichep-HA/tree/master/Pacemaker_Corosync)
 
-*Phần này sẽ giới thiệu về Pacemaker, các bước cài đặt dịch vụ để quản lý tài nguyên phục vụ cho việc HA Web server. Đi kèm là script cài đặt tự động.*
+*Tổng hợp lại những thông tin về Pacemaker, các bước cài đặt dịch vụ để quản lý tài nguyên phục vụ cho việc HA Web server. Đi kèm là script cài đặt tự động.*
