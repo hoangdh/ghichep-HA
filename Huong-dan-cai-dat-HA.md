@@ -2,7 +2,7 @@
 
 #### Mục lục
 
-[1. Giới thiệu]
+[1. Giới thiệu] (#1)
 
 [2. Cài đặt Keepalived ](#2)
 
@@ -173,7 +173,7 @@ lb2:~# ip addr sh eth0
        valid_lft forever preferred_lft forever
 ```
 <a name="3"></a>
-### 3. Cài đặt Load-balancer
+## 3. Cài đặt Load-balancer
 
 Chọn 1 trong 2 module bên dưới để làm load-balancer
 
@@ -181,7 +181,7 @@ Chọn 1 trong 2 module bên dưới để làm load-balancer
 - [HAProxy] (#3.2)
 
 <a name="3.1"></a>
-## 3.1 Cài đặt nginx làm load-balancer 
+### 3.1 Cài đặt nginx làm load-balancer 
 
 Ở trên lb1 và lb2, chúng ta cài thêm nginx để làm load-balancer.
 
@@ -229,7 +229,7 @@ chkconfig nginx on
 Như vậy chúng ta đã cài đặt xong load-balancer bằng nginx. Ngoài ra, các bạn cũng có thể tham khảo thêm cách load-balancer bằng HAProxy theo hướng dẫn bên dưới.
 
 <a name="3.2"></a>
-## 3.2 Cài đặt HAProxy
+### 3.2 Cài đặt HAProxy
 
 Chúng ta cài đặt HAProxy ở trên cả 2 máy lb1 và lb2 như sau:
 
