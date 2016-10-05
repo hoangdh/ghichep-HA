@@ -1,8 +1,30 @@
 # Cài đặt Keepalived và load-balancer cho Web Server
 
- **Chú ý**: Bài viết hướng dẫn Load-balancing cho Web Server với 2 module là nginx (ngx_http_upstream_module) và HAProxy. Hãy chọn 1 trong 2 module để cấu hình cho server của bạn, không cài đặt 2 module cùng lúc để tránh xung đột. Xin cảm ơn! 
+#### Mục lục
 
+[1. Giới thiệu]
+
+[2. Cài đặt Keepalived ](#2)
+
+[3. Cài đặt Load-balancer](#3)
+
+- [3.1 Cài đặt HAProxy ](#3.1)
+- [3.2 Cài đặt nginx (ngx_http_upstream_module)](#3.2)
+
+[4. Tham khảo ](#4)
+
+<a name="1"></a>
+## 1. Giới thiệu
+
+Cân bằng tải là một phương pháp phân phối khối lượng truy cập trên nhiều máy chủ nhằm tối ưu hóa tài nguyên hiện có đồng thời tối đa hóa thông lượng, giảm thời gian đáp ứng và tránh tình trạng quá tải cho một máy chủ. 
+
+Bạn đọc quan tâm vui lòng bấm vào <a href="https://github.com/hoangdh/">link này</a> để chuyển sang bài Giới thiệu, phân tích hoạt động của Load-balancer HAProxy.
+
+ **Chú ý**: Bài viết hướng dẫn Load-balancing cho Web Server với 2 load-balancer là nginx (sử dụng module có sẵn ngx_http_upstream_module) và HAProxy. Hãy chọn 1 trong 2 load-balancer để cấu hình cho server của bạn, không cài đặt 2 cùng lúc để sự tránh xung đột trong hệ thống. Xin cảm ơn!
+  
 ### Mô hình cài đặt
+
+<img src="http://image.prntscr.com/image/d28fbbafcc6f490e95948f5e8c62f4d6.png" width=50% />
 
 Thông tin chung:
 
@@ -16,14 +38,15 @@ Load-balancer: nginx hoặc HAProxy
 Thông tin riêng:
 
 ```
-Loadbalance 1: 192.168.100.191
-Loadbalance 2: 192.168.100.192
+lb1: 192.168.100.191
+lb2: 192.168.100.192
 Virtual IP: 192.168.100.123
-Web Server 1: 192.168.100.196
-Web Server 2: 192.168.100.198
+WEB1: 192.168.100.196
+WEB2: 192.168.100.198
 ```
 
-### 1. Cài đặt Keepalived để tạo Virtual IP
+<a name="2"></a>
+## 2. Cài đặt Keepalived để tạo Virtual IP
 
 Trên Loadbalance1 (lb1) và Loadbalance2 (lb2), chúng ta cài đặt Keepalived để tạo một Virtual IP
 
@@ -149,13 +172,16 @@ lb2:~# ip addr sh eth0
     inet6 fe80::20c:29ff:febe:7b3b/64 scope link
        valid_lft forever preferred_lft forever
 ```
+<a name="3"></a>
+### 3. Cài đặt Load-balancer
 
-## Chọn 1 trong 2 module bên dưới để làm load-balancer
+Chọn 1 trong 2 module bên dưới để làm load-balancer
 
-- [NGINX - ngx_http_upstream_module] (#nginx)
-- [HAProxy] (#haproxy)
+- [NGINX - ngx_http_upstream_module] (#3.1)
+- [HAProxy] (#3.2)
 
-### 2.1 Cài đặt nginx làm load-balancer <a name="nginx"></a>
+<a name="3.1"></a>
+## 3.1 Cài đặt nginx làm load-balancer 
 
 Ở trên lb1 và lb2, chúng ta cài thêm nginx để làm load-balancer.
 
@@ -179,7 +205,7 @@ http {
      upstream backend {
 		
         server 192.168.100.196 max_fails=3 fail_timeout=30s;
-	server 192.168.100.198 max_fails=3 fail_timeout=30s;
+        server 192.168.100.198 max_fails=3 fail_timeout=30s;
     }
 
     server {
@@ -202,7 +228,8 @@ chkconfig nginx on
 
 Như vậy chúng ta đã cài đặt xong load-balancer bằng nginx. Ngoài ra, các bạn cũng có thể tham khảo thêm cách load-balancer bằng HAProxy theo hướng dẫn bên dưới.
 
-### 2.2 Cài đặt HAProxy <a name="haproxy"></a>
+<a name="3.2"></a>
+## 3.2 Cài đặt HAProxy
 
 Chúng ta cài đặt HAProxy ở trên cả 2 máy lb1 và lb2 như sau:
 
@@ -263,8 +290,8 @@ Bật HAProxy và chạy cùng hệ thống khi khởi động:
 service haproxy start
 chkconfig haproxy on
 ```
-
-### 3. Tham khảo:
+<a name="4"></a>
+## 4. Tham khảo:
 
 - Cài đặt keepalived và HAProxy: https://www.howtoforge.com/setting-up-a-high-availability-load-balancer-with-haproxy-keepalived-on-debian-lenny-p2
 - nginx load-balancing: http://nginx.org/en/docs/http/load_balancing.html
