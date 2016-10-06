@@ -11,8 +11,3 @@ Corosync là một Cluster Engine mã nguồn mở. Nó làm nhiệm vụ truy�
 #### Pacemaker
 
 Pacemaker là một phần mềm HA dùng để quản lý tài nguyên. Pacemaker có khả năng phát hiện và phục hồi những ứng dụng và thiết bị bị lỗi. Nó nắm giữ và quản lý những cấu hình của các ứng dụng. Trong trường hợp một node trong cụm tài nguyên nó quản lý bị lỗi, Pacemaker sẽ phát hiện và khởi động Resource khả dụng đã được cấu hình sẵn trong cụm Cluster.
-
-### 2. Cài đặt và Cấu hình Linux Cluster
-
-
-
