@@ -4,8 +4,8 @@
 
 - [1. Giới thiệu](#)
 - [2. Các bước tiến hành](#)
-- [2.1 Cài đặt Galera trên 3 node](#)
-- [2.2 Cài đặt NGINX làm Load-balancer](#)
+	- [2.1 Cài đặt Galera trên 3 node](#)
+	- [2.2 Cài đặt NGINX làm Load-balancer](#)
 - [3. Kiểm tra](#)
 
 <a name="1"></a>
@@ -194,7 +194,9 @@ Các bước làm trên máy chủ `nginx-lb`.
 Để cài đặt nginx từ source, chúng ta phải cài đặt thêm cho máy chủ các trình biên dịch.
 
 ```
-yum -y install gcc gcc-c++ pcre-devel zlib-devel libxml2-devel curl-devel libjpeg-devel libpng-devel libXpm-devel freetype-devel openldap-devel wget
+yum -y install gcc gcc-c++ pcre-devel zlib-devel \
+libxml2-devel curl-devel libjpeg-devel libpng-devel \
+libXpm-devel freetype-devel openldap-devel wget
 ```
 
 - **Bước 2**: Tải `nginx` từ trang chủ
@@ -215,8 +217,23 @@ tar -xzf nginx-1.11.13.tar.gz
 
 ```
 cd nginx-1.11.13
-./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_tem --with-http_stub_status_module --with-http_ssl_module --with-stream
+
+./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx \
+ --conf-path=/etc/nginx/nginx.conf \
+ --error-log-path=/var/log/nginx/error.log \
+ --http-log-path=/var/log/nginx/access.log \
+ --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock \
+ --http-client-body-temp-path=/var/cache/nginx/client_temp \
+ --http-proxy-temp-path=/var/cache/nginx/proxy_temp \
+ --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
+ --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
+ --http-scgi-temp-path=/var/cache/nginx/scgi_tem \
+ --with-http_stub_status_module \
+ --with-http_ssl_module \
+ --with-stream
+ 
 make
+
 make install
 ```
 
@@ -362,6 +379,7 @@ SHOW DATABASES;
 ```
 
 Trên `db02`:
+
 <img src="images/t3.png" />
 
 Trên `db03`:
