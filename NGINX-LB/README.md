@@ -196,7 +196,7 @@ Các bước làm trên máy chủ `nginx-lb`.
 ```
 yum -y install gcc gcc-c++ pcre-devel zlib-devel \
 libxml2-devel curl-devel libjpeg-devel libpng-devel \
-libXpm-devel freetype-devel openldap-devel wget
+libXpm-devel freetype-devel openldap-devel wget openssl-devel
 ```
 
 - **Bước 2**: Tải `nginx` từ trang chủ
