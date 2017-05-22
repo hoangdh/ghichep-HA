@@ -2,11 +2,11 @@
 
 ### Menu
 
-- [1. Giới thiệu](#)
-- [2. Các bước tiến hành](#)
-	- [2.1 Cài đặt Galera trên 3 node](#)
-	- [2.2 Cài đặt NGINX làm Load-balancer](#)
-- [3. Kiểm tra](#)
+- [1. Giới thiệu](#1)
+- [2. Các bước tiến hành](#2)
+	- [2.1 Cài đặt Galera trên 3 node](#21)
+	- [2.2 Cài đặt NGINX làm Load-balancer](#22)
+- [3. Kiểm tra](#3)
 
 <a name="1"></a>
 ### 1. Giới thiệu
@@ -240,7 +240,9 @@ ss -npl | grep 3306
 
 <img src="images/nginx-lb.png" />
 
-Như vậy, nginx đã hoạt động và lắng nghe với port 3306. Nếu phần cài đặt và cấu hình có lỗi phát sinh, vui lòng tham khảo cách compile NGINX từ source code tại [đây](compile.md).
+Như vậy, nginx đã hoạt động và lắng nghe với port 3306.
+
+**Chú ý:** Nếu trong quá trình cài đặt và cấu hình NGINX có lỗi phát sinh, vui lòng tham khảo cách compile NGINX từ source code tại [đây](compile.md).
 
 <a name="3"></a>
 ### 3. Kiểm tra

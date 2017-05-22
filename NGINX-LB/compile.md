@@ -135,3 +135,5 @@ ss -npl | grep 3306
 <img src="images/nginx-lb.png" />
 
 Như vậy, nginx đã hoạt động và lắng nghe với port 3306.
+
+Sau đó, chúng ta cùng [kiểm tra hoạt động](README.md#3) của nó.
