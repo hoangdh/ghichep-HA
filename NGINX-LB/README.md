@@ -306,6 +306,13 @@ Trên `db03`:
 
 <img src="images/t4.png" />
 
+### Cách "chữa trị" một cluster bị restart đồng thời hoặc tắt không đúng quy trình - split brain
+- https://severalnines.com/blog/how-bootstrap-mysqlmariadb-galera-cluster
+
+### Hiểu và giải quyết xung đột dữ liệu
+- http://datacharmer.blogspot.com/2013/03/multi-master-data-conflicts-part-1.html
+- http://datacharmer.blogspot.com/2013/03/multi-master-data-conflicts-part-2.html
+
 ### Tham khảo:
 
 - http://linoxide.com/cluster/mariadb-centos-7-galera-cluster-haproxy/
